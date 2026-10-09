@@ -1,0 +1,3 @@
+# Byte-exact files: the index digests what is stored, and the app
+# downloads exactly that. No line-ending conversion, ever.
+* -text

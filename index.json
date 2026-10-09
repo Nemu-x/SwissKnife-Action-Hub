@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "packs": [
+    {
+      "name": "litigation-hold",
+      "version": "1.0.0",
+      "category": "exchange",
+      "kind": "script",
+      "title": {
+        "en": "Litigation hold",
+        "ru": "Удержание для судебных разбирательств"
+      },
+      "description": {
+        "en": "List mailboxes on litigation hold and turn the hold on or off (PowerShell).",
+        "ru": "Список ящиков на удержании и включение/выключение удержания (PowerShell)."
+      },
+      "author": "SwissKnife sample",
+      "path": "packs/litigation-hold",
+      "files": [
+        "list.ps1",
+        "manifest.yaml",
+        "set.ps1"
+      ],
+      "digest": "e5e95184da77a2f135decffddeb797edd6dc344ade7530d79ed89f2bdfe6f4f9",
+      "signed": false
+    },
+    {
+      "name": "security-basics",
+      "version": "1.0.0",
+      "category": "security",
+      "kind": "workflow",
+      "title": {
+        "en": "Security basics",
+        "ru": "Базовая безопасность"
+      },
+      "description": {
+        "en": "Compromised account response, shared-mailbox conversion and a quick offboarding — built-in actions only.",
+        "ru": "Реакция на взломанную учётку, перевод в общий ящик и быстрый офбординг — только встроенные действия."
+      },
+      "author": "SwissKnife sample",
+      "path": "packs/security-basics",
+      "files": [
+        "manifest.yaml"
+      ],
+      "digest": "8857bd8c800601734fd2ab33ff327d1a728464e3a1cf13ec7ad120bcb2c1b599",
+      "signed": false
+    }
+  ]
+}
