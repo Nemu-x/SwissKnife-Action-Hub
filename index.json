@@ -26,7 +26,7 @@
     },
     {
       "name": "security-basics",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "category": "security",
       "kind": "workflow",
       "title": {
@@ -42,7 +42,7 @@
       "files": [
         "manifest.yaml"
       ],
-      "digest": "8857bd8c800601734fd2ab33ff327d1a728464e3a1cf13ec7ad120bcb2c1b599",
+      "digest": "e8eeb141652d6bb2c224eb09339a0f742f47fd101f830c2e6cf065930e4cc492",
       "signed": false
     }
   ]
