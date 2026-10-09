@@ -3,7 +3,7 @@
   "packs": [
     {
       "name": "litigation-hold",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "category": "exchange",
       "kind": "script",
       "title": {
@@ -21,7 +21,7 @@
         "manifest.yaml",
         "set.ps1"
       ],
-      "digest": "e5e95184da77a2f135decffddeb797edd6dc344ade7530d79ed89f2bdfe6f4f9",
+      "digest": "c96be9908cf955f30ca4f71fdc1db7d0c8310fbd80ed86aaf6d30eee7aa86d07",
       "signed": false
     },
     {
