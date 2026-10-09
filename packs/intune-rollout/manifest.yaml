@@ -1,0 +1,37 @@
+# Workflow pack: roll a device baseline out to a group, or take it back.
+name: intune-rollout
+version: 1.0.0
+author: SwissKnife project
+description: Assign a configuration profile and a compliance policy to a group together, or remove both.
+category: intune
+title: { en: Intune rollout, ru: Развёртывание Intune }
+summary: { en: "Roll a configuration profile and a compliance policy out to a group together — or take both back.", ru: "Назначить группе профиль конфигурации и политику соответствия вместе — или снять оба." }
+permissions: ["DeviceManagementConfiguration.ReadWrite.All"]
+workflows:
+  - id: rolloutBaseline
+    page: intune
+    label: { en: Roll out a device baseline, ru: Развернуть базовую настройку устройств }
+    hint: { en: "Configuration profile and compliance policy for one group.", ru: "Профиль конфигурации и политика соответствия для одной группы." }
+    fields:
+      - { name: group, kind: group, required: true, label: { en: Device or user group, ru: Группа устройств или пользователей } }
+      - { name: configuration, kind: text, required: true, label: { en: Configuration profile (name or id), ru: Профиль конфигурации (имя или id) } }
+      - { name: compliance, kind: text, required: true, label: { en: Compliance policy (name or id), ru: Политика соответствия (имя или id) } }
+    steps:
+      - capability: intune.policy.assign
+        with: { policyKind: configuration, policy: "{{configuration}}", group: "{{group}}", op: add }
+      - capability: intune.policy.assign
+        with: { policyKind: compliance, policy: "{{compliance}}", group: "{{group}}", op: add }
+
+  - id: rollbackBaseline
+    page: intune
+    label: { en: Take a device baseline back, ru: Снять базовую настройку устройств }
+    hint: { en: "Removes both assignments from the group.", ru: "Снимает оба назначения с группы." }
+    fields:
+      - { name: group, kind: group, required: true, label: { en: Device or user group, ru: Группа устройств или пользователей } }
+      - { name: configuration, kind: text, required: true, label: { en: Configuration profile (name or id), ru: Профиль конфигурации (имя или id) } }
+      - { name: compliance, kind: text, required: true, label: { en: Compliance policy (name or id), ru: Политика соответствия (имя или id) } }
+    steps:
+      - capability: intune.policy.assign
+        with: { policyKind: configuration, policy: "{{configuration}}", group: "{{group}}", op: remove }
+      - capability: intune.policy.assign
+        with: { policyKind: compliance, policy: "{{compliance}}", group: "{{group}}", op: remove }

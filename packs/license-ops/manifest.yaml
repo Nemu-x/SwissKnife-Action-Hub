@@ -1,0 +1,37 @@
+# Workflow pack: license moves that otherwise take two screens.
+name: license-ops
+version: 1.0.0
+author: SwissKnife project
+description: Swap a user's license for another, or move them between distribution lists.
+category: other
+title: { en: License and list moves, ru: Перенос лицензий и рассылок }
+summary: { en: "Swap one license for another without a gap, or move someone from one distribution list to another.", ru: "Заменить одну лицензию другой без перерыва или перевести сотрудника из одной рассылки в другую." }
+permissions: ["LicenseAssignment.ReadWrite.All", "Exchange: Recipient Management (distribution lists)"]
+workflows:
+  - id: swapLicense
+    page: users
+    label: { en: Swap a license, ru: Заменить лицензию }
+    hint: { en: "The new license is added before the old one goes: no gap in service.", ru: "Новая лицензия добавляется до снятия старой: без перерыва в работе." }
+    fields:
+      - { name: user, kind: user, required: true, label: { en: User, ru: Пользователь } }
+      - { name: from, kind: text, required: true, label: { en: Current license (SKU), ru: Текущая лицензия (SKU) } }
+      - { name: to, kind: text, required: true, label: { en: New license (SKU), ru: Новая лицензия (SKU) } }
+    steps:
+      - capability: entra.license.assign
+        with: { user: "{{user}}", sku: "{{to}}", op: add }
+      - capability: entra.license.assign
+        with: { user: "{{user}}", sku: "{{from}}", op: remove }
+
+  - id: moveList
+    page: groups
+    label: { en: Move between distribution lists, ru: Перевести в другую рассылку }
+    hint: { en: "Out of one list, into another.", ru: "Выйти из одной рассылки и войти в другую." }
+    fields:
+      - { name: user, kind: user, required: true, label: { en: User, ru: Пользователь } }
+      - { name: from, kind: group, required: true, label: { en: Leave this list, ru: Выйти из рассылки } }
+      - { name: to, kind: group, required: true, label: { en: Join this list, ru: Войти в рассылку } }
+    steps:
+      - capability: exchange.distributionList.membership
+        with: { user: "{{user}}", group: "{{from}}", op: remove }
+      - capability: exchange.distributionList.membership
+        with: { user: "{{user}}", group: "{{to}}", op: add }

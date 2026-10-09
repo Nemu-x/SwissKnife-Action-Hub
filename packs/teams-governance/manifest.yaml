@@ -1,0 +1,40 @@
+# Workflow pack: Teams policies for a department or a person in one step.
+name: teams-governance
+version: 1.0.0
+author: SwissKnife project
+description: Meeting, messaging and calling policies for a group or a user at once.
+category: teams
+title: { en: Teams governance, ru: Управление Teams }
+summary: { en: "Give a department or a person its meeting, messaging and calling policies in one step.", ru: "Назначить отделу или сотруднику политики собраний, чатов и звонков одним шагом." }
+permissions: ["Teams Administrator"]
+workflows:
+  - id: departmentPolicies
+    page: teams
+    label: { en: Department Teams policies, ru: Политики Teams для отдела }
+    hint: { en: "Meeting and messaging policies for every member of a group (Global = the org default).", ru: "Политики собраний и чатов для всех участников группы (Global — по умолчанию)." }
+    fields:
+      - { name: group, kind: group, required: true, label: { en: Department group, ru: Группа отдела } }
+      - { name: meeting, kind: text, required: true, default: Global, label: { en: Meeting policy, ru: Политика собраний } }
+      - { name: messaging, kind: text, required: true, default: Global, label: { en: Messaging policy, ru: Политика чатов } }
+    steps:
+      - capability: teams.policy.assignGroup
+        with: { group: "{{group}}", policyType: meeting, policy: "{{meeting}}" }
+      - capability: teams.policy.assignGroup
+        with: { group: "{{group}}", policyType: messaging, policy: "{{messaging}}" }
+
+  - id: personPolicies
+    page: teams
+    label: { en: A person's Teams policies, ru: Политики Teams сотрудника }
+    hint: { en: "Meeting, messaging and calling policies for one user.", ru: "Политики собраний, чатов и звонков для одного пользователя." }
+    fields:
+      - { name: user, kind: user, required: true, label: { en: User, ru: Пользователь } }
+      - { name: meeting, kind: text, required: true, default: Global, label: { en: Meeting policy, ru: Политика собраний } }
+      - { name: messaging, kind: text, required: true, default: Global, label: { en: Messaging policy, ru: Политика чатов } }
+      - { name: calling, kind: text, required: true, default: Global, label: { en: Calling policy, ru: Политика звонков } }
+    steps:
+      - capability: teams.policy.assignUser
+        with: { user: "{{user}}", policyType: meeting, policy: "{{meeting}}" }
+      - capability: teams.policy.assignUser
+        with: { user: "{{user}}", policyType: messaging, policy: "{{messaging}}" }
+      - capability: teams.policy.assignUser
+        with: { user: "{{user}}", policyType: calling, policy: "{{calling}}" }

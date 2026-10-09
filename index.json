@@ -2,6 +2,93 @@
   "version": 1,
   "packs": [
     {
+      "name": "exchange-audit",
+      "version": "1.0.0",
+      "category": "reports",
+      "kind": "script",
+      "title": {
+        "en": "Exchange audit reports",
+        "ru": "Отчёты аудита Exchange"
+      },
+      "description": {
+        "en": "Who can open each shared mailbox, mailboxes with auditing off, distribution lists nobody is in (PowerShell, read-only).",
+        "ru": "Кто открывает каждый общий ящик, ящики без аудита, рассылки без участников (PowerShell, только чтение)."
+      },
+      "author": "SwissKnife project",
+      "path": "packs/exchange-audit",
+      "files": [
+        "audit-off.ps1",
+        "empty-lists.ps1",
+        "manifest.yaml",
+        "shared-access.ps1"
+      ],
+      "digest": "3b5f2c9e1f7eb67d9c6199433b1519571faacf7d48acf65b41feb5c71146f6f2",
+      "signed": false
+    },
+    {
+      "name": "hr-lifecycle",
+      "version": "1.0.0",
+      "category": "hr",
+      "kind": "workflow",
+      "title": {
+        "en": "HR lifecycle",
+        "ru": "Кадровые процессы"
+      },
+      "description": {
+        "en": "New joiner, team move, leave of absence and return from leave — built-in actions only.",
+        "ru": "Новый сотрудник, переход в другую команду, отпуск и выход из него — только встроенные действия."
+      },
+      "author": "SwissKnife project",
+      "path": "packs/hr-lifecycle",
+      "files": [
+        "manifest.yaml"
+      ],
+      "digest": "427b2ed0efaaa474ba6516a77f0e14596f976b3f3882deb200d026bdeb61f9a6",
+      "signed": false
+    },
+    {
+      "name": "intune-rollout",
+      "version": "1.0.0",
+      "category": "intune",
+      "kind": "workflow",
+      "title": {
+        "en": "Intune rollout",
+        "ru": "Развёртывание Intune"
+      },
+      "description": {
+        "en": "Roll a configuration profile and a compliance policy out to a group together — or take both back.",
+        "ru": "Назначить группе профиль конфигурации и политику соответствия вместе — или снять оба."
+      },
+      "author": "SwissKnife project",
+      "path": "packs/intune-rollout",
+      "files": [
+        "manifest.yaml"
+      ],
+      "digest": "4087eaaed639a2858ecfe00c28ae2d7ad7bf0e2786c3b5b886a274c5d975f58a",
+      "signed": false
+    },
+    {
+      "name": "license-ops",
+      "version": "1.0.0",
+      "category": "other",
+      "kind": "workflow",
+      "title": {
+        "en": "License and list moves",
+        "ru": "Перенос лицензий и рассылок"
+      },
+      "description": {
+        "en": "Swap one license for another without a gap, or move someone from one distribution list to another.",
+        "ru": "Заменить одну лицензию другой без перерыва или перевести сотрудника из одной рассылки в другую."
+      },
+      "author": "SwissKnife project",
+      "path": "packs/license-ops",
+      "files": [
+        "manifest.yaml"
+      ],
+      "digest": "f8a7833876fa091e36b7da4e0e0344576023e3fd9dbeb5839f0ef20c0f99e52a",
+      "signed": false
+    },
+    {
       "name": "litigation-hold",
       "version": "1.1.0",
       "category": "exchange",
@@ -25,6 +112,48 @@
       "signed": false
     },
     {
+      "name": "mailbox-delegation",
+      "version": "1.0.0",
+      "category": "exchange",
+      "kind": "workflow",
+      "title": {
+        "en": "Mailbox delegation",
+        "ru": "Делегирование ящиков"
+      },
+      "description": {
+        "en": "Give or take back an assistant's access in one step, open a shared mailbox to a user, set up a room.",
+        "ru": "Выдать или забрать доступ ассистента одним шагом, открыть общий ящик пользователю, настроить переговорную."
+      },
+      "author": "SwissKnife project",
+      "path": "packs/mailbox-delegation",
+      "files": [
+        "manifest.yaml"
+      ],
+      "digest": "b89ea14630a4e56627d80cb66a35d374d9ba286c43f57146a83978ec17a91ba7",
+      "signed": false
+    },
+    {
+      "name": "phishing-response",
+      "version": "1.0.0",
+      "category": "security",
+      "kind": "workflow",
+      "title": {
+        "en": "Phishing response",
+        "ru": "Реагирование на фишинг"
+      },
+      "description": {
+        "en": "Block the sender, report the message to Microsoft and purge it from every mailbox — or undo a false positive.",
+        "ru": "Заблокировать отправителя, сообщить в Microsoft и удалить письмо из всех ящиков — или отменить ложное срабатывание."
+      },
+      "author": "SwissKnife project",
+      "path": "packs/phishing-response",
+      "files": [
+        "manifest.yaml"
+      ],
+      "digest": "3ffd1f941f85ddf0606ff5f0a03ed84e8cd102d1c2c30a2744877e6aaac6a921",
+      "signed": false
+    },
+    {
       "name": "security-basics",
       "version": "1.1.0",
       "category": "security",
@@ -43,6 +172,49 @@
         "manifest.yaml"
       ],
       "digest": "e8eeb141652d6bb2c224eb09339a0f742f47fd101f830c2e6cf065930e4cc492",
+      "signed": false
+    },
+    {
+      "name": "teams-audit",
+      "version": "1.0.0",
+      "category": "reports",
+      "kind": "script",
+      "title": {
+        "en": "Teams policy audit",
+        "ru": "Аудит политик Teams"
+      },
+      "description": {
+        "en": "Everyone with a meeting, messaging or calling policy of their own — what differs from the org default (PowerShell, read-only).",
+        "ru": "Все, у кого своя политика собраний, чатов или звонков, — отличия от настроек по умолчанию (PowerShell, только чтение)."
+      },
+      "author": "SwissKnife project",
+      "path": "packs/teams-audit",
+      "files": [
+        "custom-policies.ps1",
+        "manifest.yaml"
+      ],
+      "digest": "0927a5b96bc668dc790848fd2a22054353d66cc2b1983918debc4fdc45eb125e",
+      "signed": false
+    },
+    {
+      "name": "teams-governance",
+      "version": "1.0.0",
+      "category": "teams",
+      "kind": "workflow",
+      "title": {
+        "en": "Teams governance",
+        "ru": "Управление Teams"
+      },
+      "description": {
+        "en": "Give a department or a person its meeting, messaging and calling policies in one step.",
+        "ru": "Назначить отделу или сотруднику политики собраний, чатов и звонков одним шагом."
+      },
+      "author": "SwissKnife project",
+      "path": "packs/teams-governance",
+      "files": [
+        "manifest.yaml"
+      ],
+      "digest": "ab3a00fc5dcf3a8544147e98a4ba44992516a48d226c0fe2eb5f08631b94f74a",
       "signed": false
     }
   ]

@@ -1,0 +1,38 @@
+# Script pack: read-only Exchange reports no built-in action has. Scripts run
+# in the app's restricted PowerShell: only the commands listed under cmdlets.
+name: exchange-audit
+version: 1.0.0
+author: SwissKnife project
+description: Who can open shared mailboxes, mailboxes with auditing off, empty distribution lists.
+category: reports
+title: { en: Exchange audit reports, ru: Отчёты аудита Exchange }
+summary: { en: "Who can open each shared mailbox, mailboxes with auditing off, distribution lists nobody is in (PowerShell, read-only).", ru: "Кто открывает каждый общий ящик, ящики без аудита, рассылки без участников (PowerShell, только чтение)." }
+permissions: ["Exchange: View-Only Recipients"]
+actions:
+  - id: sharedAccess
+    page: reports
+    danger: read
+    module: exo
+    script: shared-access.ps1
+    cmdlets: [Get-Mailbox, Get-MailboxPermission]
+    label: { en: Who can open shared mailboxes, ru: Кто открывает общие ящики }
+    hint: { en: Full Access granted on every shared mailbox, ru: Полный доступ к каждому общему ящику }
+    columns: [mailbox, user, rights]
+  - id: auditOff
+    page: reports
+    danger: read
+    module: exo
+    script: audit-off.ps1
+    cmdlets: [Get-Mailbox]
+    label: { en: Mailboxes with auditing off, ru: Ящики без аудита }
+    hint: { en: Their mailbox actions are not logged, ru: Действия в них не попадают в журнал }
+    columns: [name, address, type]
+  - id: emptyLists
+    page: reports
+    danger: read
+    module: exo
+    script: empty-lists.ps1
+    cmdlets: [Get-DistributionGroup, Get-DistributionGroupMember]
+    label: { en: Distribution lists nobody is in, ru: Пустые рассылки }
+    hint: { en: Candidates for clean-up, ru: Кандидаты на удаление }
+    columns: [name, address, managedBy]

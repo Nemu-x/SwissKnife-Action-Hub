@@ -1,0 +1,67 @@
+# Workflow pack: mailbox access people ask for every week.
+name: mailbox-delegation
+version: 1.0.0
+author: SwissKnife project
+description: Executive assistant access and its removal, shared mailbox access, room mailbox setup.
+category: exchange
+title: { en: Mailbox delegation, ru: Делегирование ящиков }
+summary: { en: "Give or take back an assistant's access in one step, open a shared mailbox to a user, set up a room.", ru: "Выдать или забрать доступ ассистента одним шагом, открыть общий ящик пользователю, настроить переговорную." }
+permissions: ["Exchange: Recipient Management"]
+workflows:
+  - id: assistantAccess
+    page: mail
+    label: { en: Give an assistant access, ru: Доступ ассистенту }
+    hint: { en: "Full Access, Send on behalf and editing of the calendar.", ru: "Полный доступ, отправка от имени и правка календаря." }
+    fields:
+      - { name: mailbox, kind: user, required: true, label: { en: Manager's mailbox, ru: Ящик руководителя } }
+      - { name: assistant, kind: user, required: true, label: { en: Assistant, ru: Ассистент } }
+    steps:
+      - capability: exchange.mailbox.fullAccess
+        with: { mailbox: "{{mailbox}}", user: "{{assistant}}", op: add }
+      - capability: exchange.mailbox.sendOnBehalf
+        with: { mailbox: "{{mailbox}}", delegate: "{{assistant}}", op: add }
+      - capability: exchange.mailbox.folderPermission
+        with: { mailbox: "{{mailbox}}", folder: calendar, user: "{{assistant}}", access: Editor }
+
+  - id: removeAssistant
+    page: mail
+    label: { en: Take back an assistant's access, ru: Забрать доступ ассистента }
+    hint: { en: "Removes Full Access, Send on behalf and the calendar permission.", ru: "Снимает полный доступ, отправку от имени и права на календарь." }
+    fields:
+      - { name: mailbox, kind: user, required: true, label: { en: Manager's mailbox, ru: Ящик руководителя } }
+      - { name: assistant, kind: user, required: true, label: { en: Assistant, ru: Ассистент } }
+    steps:
+      - capability: exchange.mailbox.fullAccess
+        with: { mailbox: "{{mailbox}}", user: "{{assistant}}", op: remove }
+      - capability: exchange.mailbox.sendOnBehalf
+        with: { mailbox: "{{mailbox}}", delegate: "{{assistant}}", op: remove }
+      - capability: exchange.mailbox.folderPermission
+        with: { mailbox: "{{mailbox}}", folder: calendar, user: "{{assistant}}", access: none }
+
+  - id: sharedMailboxMember
+    page: mail
+    label: { en: Open a shared mailbox to someone, ru: Открыть общий ящик сотруднику }
+    hint: { en: "Full Access, and Send As when they answer from it.", ru: "Полный доступ и «Отправить как», если отвечают с этого адреса." }
+    fields:
+      - { name: mailbox, kind: user, required: true, label: { en: Shared mailbox, ru: Общий ящик } }
+      - { name: user, kind: user, required: true, label: { en: Who, ru: Кому } }
+      - { name: sendAs, kind: choice, options: ["yes", "no"], default: "yes", label: { en: Send as the mailbox, ru: Отправлять от имени ящика } }
+    steps:
+      - capability: exchange.mailbox.fullAccess
+        with: { mailbox: "{{mailbox}}", user: "{{user}}", op: add }
+      - capability: exchange.mailbox.sendAs
+        with: { mailbox: "{{mailbox}}", user: "{{user}}", op: add }
+        when: { input: sendAs, equals: "yes" }
+
+  - id: roomSetup
+    page: mail
+    label: { en: Set up a meeting room, ru: Настроить переговорную }
+    hint: { en: "Accept bookings automatically; the room's owner gets Full Access.", ru: "Принимать бронирования автоматически; владелец переговорной получает полный доступ." }
+    fields:
+      - { name: room, kind: user, required: true, label: { en: Room mailbox, ru: Ящик переговорной } }
+      - { name: owner, kind: user, required: true, label: { en: Room owner, ru: Владелец } }
+    steps:
+      - capability: exchange.mailbox.calendarProcessing
+        with: { mailbox: "{{room}}", automate: AutoAccept }
+      - capability: exchange.mailbox.fullAccess
+        with: { mailbox: "{{room}}", user: "{{owner}}", op: add }

@@ -1,0 +1,78 @@
+# Workflow pack: the everyday joiner / mover / leave flows HR asks IT for.
+# Built-in actions only, previewed together and confirmed once.
+name: hr-lifecycle
+version: 1.0.0
+author: SwissKnife project
+description: New joiner, team move, leave of absence and return — built-in actions only.
+category: hr
+title: { en: HR lifecycle, ru: Кадровые процессы }
+summary: { en: "New joiner, team move, leave of absence and return from leave — built-in actions only.", ru: "Новый сотрудник, переход в другую команду, отпуск и выход из него — только встроенные действия." }
+permissions: ["User.ReadWrite.All", "GroupMember.ReadWrite.All", "LicenseAssignment.ReadWrite.All", "Exchange: Recipient Management (forwarding)"]
+workflows:
+  - id: newJoiner
+    page: users
+    label: { en: New joiner, ru: Новый сотрудник }
+    hint: { en: "Country, manager, license and team group in one go.", ru: "Страна, руководитель, лицензия и группа команды за один раз." }
+    fields:
+      - { name: user, kind: user, required: true, label: { en: New joiner, ru: Сотрудник } }
+      - { name: manager, kind: user, required: true, label: { en: Manager, ru: Руководитель } }
+      - { name: country, kind: text, required: true, default: US, label: { en: Usage location (two letters), ru: Страна использования (две буквы) } }
+      - { name: sku, kind: text, required: true, label: { en: License (SKU part number or id), ru: Лицензия (SKU или id) } }
+      - { name: group, kind: group, required: true, label: { en: Team group, ru: Группа команды } }
+    steps:
+      # A license needs the usage location first.
+      - capability: entra.user.usageLocation
+        with: { user: "{{user}}", country: "{{country}}" }
+      - capability: entra.user.manager
+        with: { user: "{{user}}", manager: "{{manager}}" }
+      - capability: entra.license.assign
+        with: { user: "{{user}}", sku: "{{sku}}", op: add }
+      - capability: entra.group.membership
+        with: { user: "{{user}}", group: "{{group}}", role: member, op: add }
+
+  - id: teamMove
+    page: users
+    label: { en: Move to another team, ru: Перевод в другую команду }
+    hint: { en: "New manager, out of the old team group, into the new one.", ru: "Новый руководитель, выход из старой группы команды, вход в новую." }
+    fields:
+      - { name: user, kind: user, required: true, label: { en: Employee, ru: Сотрудник } }
+      - { name: manager, kind: user, required: true, label: { en: New manager, ru: Новый руководитель } }
+      - { name: oldGroup, kind: group, required: true, label: { en: Old team group, ru: Старая группа } }
+      - { name: newGroup, kind: group, required: true, label: { en: New team group, ru: Новая группа } }
+    steps:
+      - capability: entra.user.manager
+        with: { user: "{{user}}", manager: "{{manager}}" }
+      - capability: entra.group.membership
+        with: { user: "{{user}}", group: "{{oldGroup}}", role: member, op: remove }
+      - capability: entra.group.membership
+        with: { user: "{{user}}", group: "{{newGroup}}", role: member, op: add }
+
+  - id: leaveOfAbsence
+    page: users
+    label: { en: Leave of absence, ru: Длительное отсутствие }
+    hint: { en: "Block sign-in and sessions; mail goes to a colleague, a copy stays.", ru: "Заблокировать вход и сессии; почта идёт коллеге, копия остаётся." }
+    confirmField: user
+    fields:
+      - { name: user, kind: user, required: true, label: { en: Employee, ru: Сотрудник } }
+      - { name: forwardTo, kind: user, required: true, label: { en: Forward mail to, ru: Пересылать почту } }
+    steps:
+      - capability: entra.user.signIn
+        with: { user: "{{user}}", state: blocked }
+      - capability: entra.user.revokeSessions
+        with: { user: "{{user}}" }
+      - capability: exchange.mailbox.forwarding
+        with: { mailbox: "{{user}}", op: set, forwardTo: "{{forwardTo}}", keepCopy: "yes" }
+        onError: continue
+
+  - id: returnFromLeave
+    page: users
+    label: { en: Back from leave, ru: Выход из отсутствия }
+    hint: { en: "Allow sign-in again and stop the forwarding.", ru: "Снова разрешить вход и снять пересылку." }
+    fields:
+      - { name: user, kind: user, required: true, label: { en: Employee, ru: Сотрудник } }
+    steps:
+      - capability: entra.user.signIn
+        with: { user: "{{user}}", state: allowed }
+      - capability: exchange.mailbox.forwarding
+        with: { mailbox: "{{user}}", op: clear }
+        onError: continue

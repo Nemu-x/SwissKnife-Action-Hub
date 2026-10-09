@@ -1,0 +1,20 @@
+# Script pack: read-only Teams report. Runs in the app's restricted
+# PowerShell: only the commands listed under cmdlets.
+name: teams-audit
+version: 1.0.0
+author: SwissKnife project
+description: Users whose Teams policies differ from the org defaults.
+category: reports
+title: { en: Teams policy audit, ru: Аудит политик Teams }
+summary: { en: "Everyone with a meeting, messaging or calling policy of their own — what differs from the org default (PowerShell, read-only).", ru: "Все, у кого своя политика собраний, чатов или звонков, — отличия от настроек по умолчанию (PowerShell, только чтение)." }
+permissions: ["Teams Administrator (or Teams Communications Support Engineer)"]
+actions:
+  - id: customPolicies
+    page: reports
+    danger: read
+    module: teams
+    script: custom-policies.ps1
+    cmdlets: [Get-CsOnlineUser]
+    label: { en: Users with their own Teams policies, ru: Пользователи со своими политиками Teams }
+    hint: { en: Direct assignments that override the org defaults, ru: Прямые назначения поверх настроек по умолчанию }
+    columns: [user, meeting, messaging, calling]

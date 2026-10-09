@@ -1,0 +1,47 @@
+# Workflow pack: a phishing wave and a false positive, end to end.
+name: phishing-response
+version: 1.0.0
+author: SwissKnife project
+description: Block a phishing sender, report it and purge the copies; undo a false positive.
+category: security
+title: { en: Phishing response, ru: Реагирование на фишинг }
+summary: { en: "Block the sender, report the message to Microsoft and purge it from every mailbox — or undo a false positive.", ru: "Заблокировать отправителя, сообщить в Microsoft и удалить письмо из всех ящиков — или отменить ложное срабатывание." }
+permissions: ["Exchange: Security Administrator (block list, quarantine)", "ThreatSubmission.ReadWrite.All", "eDiscovery.ReadWrite.All (purge)"]
+workflows:
+  - id: phishingWave
+    page: security
+    label: { en: Phishing wave, ru: Фишинговая рассылка }
+    hint: { en: "Block the sender, report it, then purge the message from every mailbox.", ru: "Заблокировать отправителя, сообщить о нём и удалить письмо из всех ящиков." }
+    confirmField: sender
+    fields:
+      - { name: sender, kind: text, required: true, label: { en: Sender address or domain, ru: Адрес или домен отправителя } }
+      - { name: reporter, kind: user, required: true, label: { en: Who received it, ru: Кто получил } }
+      - { name: subject, kind: text, label: { en: Subject (narrows the purge), ru: Тема (сужает удаление) } }
+      - { name: purge, kind: choice, options: ["yes", "no"], default: "yes", label: { en: Purge the copies, ru: Удалить копии } }
+      - { name: purgeType, kind: choice, options: ["recoverable", "permanent"], default: "recoverable", label: { en: How, ru: Как удалять } }
+    steps:
+      - capability: defender.sender.block
+        with: { sender: "{{sender}}", op: add }
+      - capability: defender.mail.reportThreat
+        with: { user: "{{reporter}}", sender: "{{sender}}", category: phishing }
+        onError: continue
+      - capability: compliance.mail.purge
+        with: { sender: "{{sender}}", subject: "{{subject}}", purgeType: "{{purgeType}}" }
+        when: { input: purge, equals: "yes" }
+
+  - id: falsePositive
+    page: security
+    label: { en: Not phishing after all, ru: Это не фишинг }
+    hint: { en: "Unblock the sender, release the message and report it as clean.", ru: "Разблокировать отправителя, выпустить письмо и сообщить, что оно чистое." }
+    fields:
+      - { name: sender, kind: text, required: true, label: { en: Sender address or domain, ru: Адрес или домен отправителя } }
+      - { name: message, kind: text, required: true, label: { en: Quarantine message id, ru: Id письма в карантине } }
+      - { name: reporter, kind: user, required: true, label: { en: Who should get it, ru: Кому оно предназначалось } }
+    steps:
+      - capability: defender.sender.block
+        with: { sender: "{{sender}}", op: remove }
+      - capability: defender.quarantine.release
+        with: { identity: "{{message}}" }
+      - capability: defender.mail.reportThreat
+        with: { user: "{{reporter}}", sender: "{{sender}}", category: notJunk }
+        onError: continue
