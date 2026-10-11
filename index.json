@@ -20,10 +20,12 @@
         "audit-off.ps1",
         "empty-lists.ps1",
         "manifest.yaml",
+        "pack.digest",
+        "pack.digest.minisig",
         "shared-access.ps1"
       ],
       "digest": "3b5f2c9e1f7eb67d9c6199433b1519571faacf7d48acf65b41feb5c71146f6f2",
-      "signed": false
+      "signed": true
     },
     {
       "name": "hr-lifecycle",
@@ -41,10 +43,12 @@
       "author": "SwissKnife project",
       "path": "packs/hr-lifecycle",
       "files": [
-        "manifest.yaml"
+        "manifest.yaml",
+        "pack.digest",
+        "pack.digest.minisig"
       ],
       "digest": "427b2ed0efaaa474ba6516a77f0e14596f976b3f3882deb200d026bdeb61f9a6",
-      "signed": false
+      "signed": true
     },
     {
       "name": "intune-rollout",
@@ -62,10 +66,12 @@
       "author": "SwissKnife project",
       "path": "packs/intune-rollout",
       "files": [
-        "manifest.yaml"
+        "manifest.yaml",
+        "pack.digest",
+        "pack.digest.minisig"
       ],
       "digest": "4087eaaed639a2858ecfe00c28ae2d7ad7bf0e2786c3b5b886a274c5d975f58a",
-      "signed": false
+      "signed": true
     },
     {
       "name": "license-ops",
@@ -83,10 +89,12 @@
       "author": "SwissKnife project",
       "path": "packs/license-ops",
       "files": [
-        "manifest.yaml"
+        "manifest.yaml",
+        "pack.digest",
+        "pack.digest.minisig"
       ],
       "digest": "f8a7833876fa091e36b7da4e0e0344576023e3fd9dbeb5839f0ef20c0f99e52a",
-      "signed": false
+      "signed": true
     },
     {
       "name": "litigation-hold",
@@ -106,10 +114,12 @@
       "files": [
         "list.ps1",
         "manifest.yaml",
+        "pack.digest",
+        "pack.digest.minisig",
         "set.ps1"
       ],
       "digest": "c96be9908cf955f30ca4f71fdc1db7d0c8310fbd80ed86aaf6d30eee7aa86d07",
-      "signed": false
+      "signed": true
     },
     {
       "name": "mailbox-delegation",
@@ -127,10 +137,12 @@
       "author": "SwissKnife project",
       "path": "packs/mailbox-delegation",
       "files": [
-        "manifest.yaml"
+        "manifest.yaml",
+        "pack.digest",
+        "pack.digest.minisig"
       ],
       "digest": "b89ea14630a4e56627d80cb66a35d374d9ba286c43f57146a83978ec17a91ba7",
-      "signed": false
+      "signed": true
     },
     {
       "name": "phishing-response",
@@ -148,10 +160,12 @@
       "author": "SwissKnife project",
       "path": "packs/phishing-response",
       "files": [
-        "manifest.yaml"
+        "manifest.yaml",
+        "pack.digest",
+        "pack.digest.minisig"
       ],
       "digest": "3ffd1f941f85ddf0606ff5f0a03ed84e8cd102d1c2c30a2744877e6aaac6a921",
-      "signed": false
+      "signed": true
     },
     {
       "name": "security-basics",
@@ -169,10 +183,12 @@
       "author": "SwissKnife sample",
       "path": "packs/security-basics",
       "files": [
-        "manifest.yaml"
+        "manifest.yaml",
+        "pack.digest",
+        "pack.digest.minisig"
       ],
       "digest": "e8eeb141652d6bb2c224eb09339a0f742f47fd101f830c2e6cf065930e4cc492",
-      "signed": false
+      "signed": true
     },
     {
       "name": "teams-audit",
@@ -191,10 +207,12 @@
       "path": "packs/teams-audit",
       "files": [
         "custom-policies.ps1",
-        "manifest.yaml"
+        "manifest.yaml",
+        "pack.digest",
+        "pack.digest.minisig"
       ],
       "digest": "0927a5b96bc668dc790848fd2a22054353d66cc2b1983918debc4fdc45eb125e",
-      "signed": false
+      "signed": true
     },
     {
       "name": "teams-governance",
@@ -212,10 +230,12 @@
       "author": "SwissKnife project",
       "path": "packs/teams-governance",
       "files": [
-        "manifest.yaml"
+        "manifest.yaml",
+        "pack.digest",
+        "pack.digest.minisig"
       ],
       "digest": "ab3a00fc5dcf3a8544147e98a4ba44992516a48d226c0fe2eb5f08631b94f74a",
-      "signed": false
+      "signed": true
     }
   ]
 }
