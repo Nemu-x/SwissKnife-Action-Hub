@@ -1,0 +1,57 @@
+name: sign
+
+# After a merge to main, sign every pack whose files changed with the pack key
+# (secret PACK_SIGNING_KEY; public half in pack.pub, built into the app) and
+# commit the signatures with a rebuilt index. Only reviewed code on main is
+# signed: pull requests never see the key.
+on:
+  push:
+    branches: [main]
+    paths: ["packs/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sign
+  cancel-in-progress: false
+
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Tools
+        run: |
+          pip install pyyaml
+          sudo apt-get update && sudo apt-get install -y minisign
+      - name: Sign changed packs
+        env:
+          PACK_SIGNING_KEY: ${{ secrets.PACK_SIGNING_KEY }}
+          PACK_SIGNING_PASSWORD: ${{ secrets.PACK_SIGNING_PASSWORD }}
+        run: |
+          if [ -z "$PACK_SIGNING_KEY" ]; then
+            echo "::error::PACK_SIGNING_KEY is not set"
+            exit 1
+          fi
+          umask 077
+          key="$RUNNER_TEMP/pack.key"
+          printf '%s\n' "$PACK_SIGNING_KEY" > "$key"
+          python tools/sign_packs.py --key "$key"
+          rm -f "$key"
+          python tools/build_index.py
+      - name: Commit signatures
+        run: |
+          git add -A packs index.json
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Sign packs"
+          git push

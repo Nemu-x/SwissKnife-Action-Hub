@@ -30,6 +30,18 @@ Either way, an installed pack runs only when it is **signed** by a key the
 operator trusts, or after the operator **reviewed and trusted** its exact files.
 Installing checks every file against the digest in [`index.json`](index.json).
 
+## Signatures
+
+Packs on `main` are signed by CI after review (`.github/workflows/sign.yml`)
+with the project's **pack key** — public half in [`pack.pub`](pack.pub), key id
+`454C550D267A0654`, built into SwissKnife 2.0 — so they install as **Signed**.
+It is a key of its own: SwissKnife releases are signed with a different one.
+Check a pack by hand with:
+
+```
+minisign -Vm packs/<name>/pack.digest -p pack.pub
+```
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). The pack format is documented in the

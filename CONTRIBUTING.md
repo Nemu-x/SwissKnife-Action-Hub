@@ -15,7 +15,9 @@
    ```
 
 5. Open a pull request. Reviewers read every line: what it changes, which
-   permissions it needs, and that a plan step never writes.
+   permissions it needs, and that a plan step never writes. Do not add
+   `pack.digest` or a signature: once merged, CI signs the pack with the
+   project's pack key.
 
 Rules: no obfuscated code, no downloads or external calls from scripts, no
 secrets in files, English labels required (Russian welcome). Files are stored
